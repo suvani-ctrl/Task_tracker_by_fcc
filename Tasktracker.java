@@ -1,15 +1,20 @@
 import java.util.Scanner;
+
+import UUIDGenerator;
 import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
-import com.fasterxml.jackson.databind.ObjectMapper;
-public class Tasktracker {
+import java.util.HashMap;
+import java.rmi.server.UID;
 
+
+public class Tasktracker {
+    static HashMap <String,Task> taskMap = new HashMap<>();
+    static Scanner  scanner = new Scanner (System.in);
     
     static class Task{
-        long id;
+        String id;
         String taskDescription;
         String username;
         String displayName;
@@ -17,7 +22,7 @@ public class Tasktracker {
         String updatedAt;
 
         public Task(
-            long id,
+            String id,
             String taskDescription,
             String username,
             String displayName,
@@ -34,48 +39,35 @@ public class Tasktracker {
     }
 
 
-      public static String listTask(){
-        if(Tasks.isEmpty()){
-            System.out.println("No tasks found");
-            return "No tasks fond";
-        }
-        try (FileWriter fw = new FileWriter("tasks.json")){
-            fw.write("[");
-            for (int i = 0 ; i<Tasks.size(); i++){
-                Task t = Tasks.get(i);
-                fw.write("{\"id\":" + t.id +
-                     ",\"description\":\"" + t.taskDescription + "\"" +
-                     ",\"username\":\"" + t.username + "\"}");
-                     if (i < Tasks.size() - 1) fw.write(",");
-            }
-            fw.write("]");
-            System.out.println("Tasks saved to json");
-            
-        } catch (Exception e) {
-                e.printStackTrace();
-        }
-        return "Tasks are listed";
-    }
-        
+   
 
     public static String markTaskAsDone(){
 
         return "Task Marked As Done";
     }
 
-
-    private static String UserProfile(){
-       String username = scanner.nextLine();
-          System.out.println("Enter the username:");
-       System.out.println("Enter the display name:");
+    public static String create_task(){
+        System.out.println("Enter the username:");
+        String username = scanner.nextLine();
+        System.out.println("Enter the display name:");
         String displayname = scanner.nextLine();
-        System.out.println("Enter the task Description:");
+        System.out.println("Enter the task description:");
         String taskDescription = scanner.nextLine();
-        System.out.println("!!! Wait while we grant you a task Id !!!");
+        String uniqueId = UUIDGenerator.nextUID();
         String createdAt = LocalDateTime.now().toString();
         String updatedAt = createdAt;
-        return "Profile created for" + username + "with display name of"+ displayname + "named"+ taskDescription + "created at"+createdAt+"updated at last:" + updatedAt;
+        Task newTask = new Task(
+            uniqueId,
+            taskDescription,
+            username,
+            displayname,
+            createdAt,
+            updatedAt
+        );
+        taskMap.put(uniqueId,newTask);
+        return "Task has just been created";
     }
+
     public static void main(String[] args){
         while(true){
             System.out.println("Task Tracker");
