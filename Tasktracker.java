@@ -39,6 +39,27 @@ public class Tasktracker {
         }
     }
 
+    public static String listTask(){
+
+    }
+
+    public static String deleteTask(){
+
+    }
+
+    public static String updateTask(String id,String taskDescription){
+
+        if(!taskMap.containsKey(id)){
+            return "Task with such id was not found";
+        }
+            Task t = taskMap.get(id);
+            t.taskDescription = taskDescription;
+            t.updatedAt = LocalDateTime.now().toString();
+            return "Task update successfull";
+    
+    }
+
+
     public static String taskProgress(String id, String status){
         if(!taskMap.containsKey(id)){
             return "Task with such is not found";
@@ -96,7 +117,7 @@ public class Tasktracker {
                     deleteTask();
                     break;
                 case "4":
-                    listTask();
+                    updateTask();
                     break;
                 case "5":
                     System.out.println("Pass the unique task id");
