@@ -41,12 +41,13 @@ public class Tasktracker {
 
     public static String taskProgress(String id, String status){
         if(!taskMap.containsKey(id)){
-            System.out.println("Task with such" +id + "was not found");
+            return "Task with such is not found";
         }else{
             Task t =  taskMap.get(id);
+            t.updatedAt = LocalDateTime.now().toString();
             t.status = status;
+            return "Task Markeded successfull";
         }
-        return "Task Marked + " + status + "successfully!";
     }
 
     public static String create_task(){
@@ -102,7 +103,7 @@ public class Tasktracker {
                     String id = scanner.nextLine();
                     System.out.println("Update the status");
                     String status = scanner.nextLine();
-                    taskProgress(id,status);
+                    System.out.println(taskProgress(id, status));
                     break;
                 case "6":
                     System.out.println("Bye");
