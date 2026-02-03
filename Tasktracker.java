@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 import UUIDGenerator;
 import java.io.File;
 import java.io.FileWriter;
@@ -7,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.rmi.server.UID;
-
 
 public class Tasktracker {
     static HashMap <String,Task> taskMap = new HashMap<>();
@@ -20,6 +18,7 @@ public class Tasktracker {
         String displayName;
         String createdAt;
         String updatedAt;
+        String status;
 
         public Task(
             String id,
@@ -27,7 +26,8 @@ public class Tasktracker {
             String username,
             String displayName,
             String createdAt,
-            String updatedAt
+            String updatedAt,
+            String status
         ){
             this.id = id;
             this.taskDescription = taskDescription;
@@ -35,15 +35,18 @@ public class Tasktracker {
             this.displayName = displayName;
             this.createdAt = createdAt;
             this.updatedAt = updatedAt;
+            this.status = status;
         }
     }
 
-
-   
-
-    public static String markTaskAsDone(){
-
-        return "Task Marked As Done";
+    public static String taskProgress(String id, String status){
+        if(!taskMap.containsKey(id)){
+            System.out.println("Task with such" +id + "was not found");
+        }else{
+            Task t =  taskMap.get(id);
+            t.status = status;
+        }
+        return "Task Marked + " + status + "successfully!";
     }
 
     public static String create_task(){
@@ -56,13 +59,16 @@ public class Tasktracker {
         String uniqueId = UUIDGenerator.nextUID();
         String createdAt = LocalDateTime.now().toString();
         String updatedAt = createdAt;
+        System.out.println("Enter the task status:");
+        String status = scanner.nextLine();
         Task newTask = new Task(
             uniqueId,
             taskDescription,
             username,
             displayname,
             createdAt,
-            updatedAt
+            updatedAt,
+            status
         );
         taskMap.put(uniqueId,newTask);
         return "Task has just been created";
@@ -80,8 +86,7 @@ public class Tasktracker {
             String choice = scanner.nextLine();
             switch(choice){
                 case "1":
-                    String message = createuserProfile();
-                    System.out.println(message);
+                    create_task();
                     break;
                 case "2":
                     listTask();
@@ -93,7 +98,11 @@ public class Tasktracker {
                     listTask();
                     break;
                 case "5":
-                    markTaskAsDone();
+                    System.out.println("Pass the unique task id");
+                    String id = scanner.nextLine();
+                    System.out.println("Update the status");
+                    String status = scanner.nextLine();
+                    taskProgress(id,status);
                     break;
                 case "6":
                     System.out.println("Bye");
