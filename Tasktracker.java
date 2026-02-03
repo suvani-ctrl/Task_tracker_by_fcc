@@ -39,12 +39,19 @@ public class Tasktracker {
         }
     }
 
-    public static String listTask(){
+    public static String listTask(String id){
+
+        for (i = 0; i<task)
 
     }
 
-    public static String deleteTask(){
+    public static String deleteTask(String id){
 
+           if( taskMap.remove(id) == null ){
+            return "Task with such id was not found";
+           }
+           
+        return "Task deletion successfull!";
     }
 
     public static String updateTask(String id,String taskDescription){
