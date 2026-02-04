@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import TaskIdGenerator;
-
 
 public class Tasktracker {
     static HashMap <String,Task> taskMap = new HashMap<>();
@@ -93,7 +91,7 @@ public class Tasktracker {
         String displayname = scanner.nextLine();
         System.out.println("Enter the task description:");
         String taskDescription = scanner.nextLine();
-        String uniqueId = UUIDGenerator.();
+        String uniqueId = TaskIdGenerator.generateUniqueTaskId();
         String createdAt = LocalDateTime.now().toString();
         String updatedAt = createdAt;
         System.out.println("Enter the task status:");
