@@ -1,11 +1,11 @@
 import java.util.Scanner;
-import UUIDGenerator;
 import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.rmi.server.UID;
+import TaskIdGenerator;
+
 
 public class Tasktracker {
     static HashMap <String,Task> taskMap = new HashMap<>();
@@ -39,9 +39,17 @@ public class Tasktracker {
         }
     }
 
-    public static String listTask(String id){
+    public static void listTask(){
 
-        for (i = 0; i<task)
+        if(!taskMap.isEmpty()){
+            for (Task t : taskMap.values()){
+                System.out.println("Id:" + t.id + "Description:" + t.taskDescription);
+            }
+        }
+        else{
+            System.out.println("No tasks found");
+            return;
+        }
 
     }
 
@@ -85,7 +93,7 @@ public class Tasktracker {
         String displayname = scanner.nextLine();
         System.out.println("Enter the task description:");
         String taskDescription = scanner.nextLine();
-        String uniqueId = UUIDGenerator.nextUID();
+        String uniqueId = UUIDGenerator.();
         String createdAt = LocalDateTime.now().toString();
         String updatedAt = createdAt;
         System.out.println("Enter the task status:");
@@ -104,7 +112,10 @@ public class Tasktracker {
     }
 
     public static void main(String[] args){
-        while(true){
+
+        boolean program_start = true;
+
+        while(program_start){
             System.out.println("Task Tracker");
             System.out.println("1. Create a Task");
             System.out.println("2. List Tasks");
@@ -121,21 +132,28 @@ public class Tasktracker {
                     listTask();
                     break;
                 case "3":
-                    deleteTask();
+                    System.out.println("Enter the unique task id:");
+                    String id1 = scanner.nextLine();
+                    deleteTask(id1);
                     break;
                 case "4":
-                    updateTask();
+                    System.out.println("Enter the unique task id :");
+                    String id2 = scanner.nextLine();
+                    System.out.println("New task description:");
+                    String task_now = scanner.nextLine();
+                    updateTask(id2,task_now);
                     break;
                 case "5":
                     System.out.println("Pass the unique task id");
-                    String id = scanner.nextLine();
+                    String id3 = scanner.nextLine();
                     System.out.println("Update the status");
                     String status = scanner.nextLine();
-                    System.out.println(taskProgress(id, status));
+                    System.out.println(taskProgress(id3, status));
                     break;
                 case "6":
                     System.out.println("Bye");
                     System.exit(0);
+                    program_start = false;
                     break;
                 default:
                     System.out.println("Invalid choice");
@@ -144,6 +162,5 @@ public class Tasktracker {
         }
         scanner.close();
     }
-
 }
 
