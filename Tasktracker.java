@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,40 +10,12 @@ public class Tasktracker {
     static HashMap <String,Task> taskMap = new HashMap<>();
     static Scanner  scanner = new Scanner (System.in);
     
-    static class Task{
-        String id;
-        String taskDescription;
-        String username;
-        String displayName;
-        String createdAt;
-        String updatedAt;
-        String status;
-
-        public Task(
-            String id,
-            String taskDescription,
-            String username,
-            String displayName,
-            String createdAt,
-            String updatedAt,
-            String status
-        ){
-            this.id = id;
-            this.taskDescription = taskDescription;
-            this.username = username;
-            this.displayName = displayName;
-            this.createdAt = createdAt;
-            this.updatedAt = updatedAt;
-            this.status = status;
-        }
-    }
 
     public static void listTask(){
 
-        if(!taskMap.isEmpty()){
-            for (Task t : taskMap.values()){
-                System.out.println("Id:" + t.id + "Description:" + t.taskDescription);
-            }
+        if(new File("MyTasks.json").isFile())
+        {
+
         }
         else{
             System.out.println("No tasks found");
@@ -109,8 +82,15 @@ public class Tasktracker {
         return "Task has just been created";
     }
 
-    public static void main(String[] args){
 
+
+    public static void main(String[] args){
+        File file = new File("MyTasks.json");
+        if(file.isFile()){
+            System.out.println("Found the file!");
+        }else{
+            System.out.println("No previous file found");
+        }
         boolean program_start = true;
 
         while(program_start){
@@ -124,30 +104,36 @@ public class Tasktracker {
             String choice = scanner.nextLine();
             switch(choice){
                 case "1":
-                    create_task();
+                    System.out.println(create_task());
+                    SaveJson.saveJson(taskMap);
                     break;
                 case "2":
                     listTask();
                     break;
                 case "3":
-                    System.out.println("Enter the unique task id:");
-                    String id1 = scanner.nextLine();
-                    deleteTask(id1);
-                    break;
-                case "4":
                     System.out.println("Enter the unique task id :");
                     String id2 = scanner.nextLine();
                     System.out.println("New task description:");
                     String task_now = scanner.nextLine();
                     updateTask(id2,task_now);
+                    SaveJson.saveJson(taskMap);
                     break;
+                case "4":
+                    System.out.println("Enter the unique task id:");
+                    String id1 = scanner.nextLine();
+                    deleteTask(id1);
+                    SaveJson.saveJson(taskMap);
+                    break;
+                
                 case "5":
                     System.out.println("Pass the unique task id");
                     String id3 = scanner.nextLine();
                     System.out.println("Update the status");
                     String status = scanner.nextLine();
                     System.out.println(taskProgress(id3, status));
+                    SaveJson.saveJson(taskMap);
                     break;
+
                 case "6":
                     System.out.println("Bye");
                     System.exit(0);
